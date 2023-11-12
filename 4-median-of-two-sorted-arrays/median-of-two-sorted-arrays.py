@@ -1,31 +1,17 @@
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        A, B = nums1, nums2
-        total = len(nums1) + len(nums2)
-        half = total // 2
-
-        if len(B) < len(A):
-            A, B = B, A
-
-        l, r = 0, len(A) - 1
-        while True:
-            i = (l + r) // 2  # A
-            j = half - i - 2  # B
-
-            Aleft = A[i] if i >= 0 else float("-infinity")
-            Aright = A[i + 1] if (i + 1) < len(A) else float("infinity")
-            Bleft = B[j] if j >= 0 else float("-infinity")
-            Bright = B[j + 1] if (j + 1) < len(B) else float("infinity")
-
-            # partition is correct
-            if Aleft <= Bright and Bleft <= Aright:
-                # odd
-                if total % 2:
-                    return min(Aright, Bright)
-                # even
-                return (max(Aleft, Bleft) + min(Aright, Bright)) / 2
-            elif Aleft > Bright:
-                r = i - 1
+        N1, N2 = len(nums1), len(nums2)
+        if N1 < N2: 
+            nums1, N1, nums2, N2 = nums2, N2, nums1, N1
+        l, r = 0, N2*2
+        while l <= r:
+            j = (l + r) >> 1
+            i = N1 + N2 - j
+            L1 = -sys.maxsize-1 if i == 0 else nums1[(i-1)>>1]
+            L2 = -sys.maxsize-1 if j == 0 else nums2[(j-1)>>1]
+            R1 = sys.maxsize if i == 2*N1 else nums1[i>>1]
+            R2 = sys.maxsize if j == 2*N2 else nums2[j>>1]
+            if L1 > R2: l = j + 1
+            elif L2 > R1: r = j - 1
             else:
-                l = i + 1
-        
+                return (max(L1, L2) + min(R1, R2))/2.0
