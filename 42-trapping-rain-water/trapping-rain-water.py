@@ -1,5 +1,5 @@
-class Solution(object):
-    def trap(self, height):
+class Solution:
+    def trap(self, height: List[int]) -> int:
         if not height:
             return 0
 
@@ -15,5 +15,4 @@ class Solution(object):
                 r -= 1
                 rightMax = max(rightMax, height[r])
                 res += rightMax - height[r]
-        return res
-        
+        return res 
