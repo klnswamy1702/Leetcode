@@ -1,5 +1,5 @@
-class Solution:
-    def peopleAwareOfSecret(self, n: int, dd: int, ff: int) -> int:
+class Solution(object):
+    def peopleAwareOfSecret(self, n, dd, ff):
         dp, mod, ans = [0] * 1001, 1000000007, 0
         dp[1] = 1
         for d in range(1, n + 1):
@@ -10,4 +10,10 @@ class Solution:
             if d + ff > n:
                 ans += dp[d]
         return ans % mod
+        """
+        :type n: int
+        :type delay: int
+        :type forget: int
+        :rtype: int
+        """
         
