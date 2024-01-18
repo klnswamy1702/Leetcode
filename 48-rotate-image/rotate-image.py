@@ -1,8 +1,5 @@
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
-        """
-        Do not return anything, modify matrix in-place instead.
-        """
         l, r = 0, len(matrix) - 1
         while l < r:
             for i in range(r - l):
@@ -24,4 +21,7 @@ class Solution:
                 matrix[top + i][r] = topLeft
             r -= 1
             l += 1
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
         
