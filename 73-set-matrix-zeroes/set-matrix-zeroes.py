@@ -1,8 +1,5 @@
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
-        """
-        Do not return anything, modify matrix in-place instead.
-        """
         ROWS, COLS = len(matrix), len(matrix[0])
         rowZero = False
 
@@ -28,4 +25,7 @@ class Solution:
         if rowZero:
             for c in range(COLS):
                 matrix[0][c] = 0
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
         
