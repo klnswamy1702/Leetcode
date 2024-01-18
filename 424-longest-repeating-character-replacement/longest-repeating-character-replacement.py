@@ -3,12 +3,12 @@ class Solution:
         count = {}
         
         l = 0
-        maxxxx = 0
+        maxf = 0
         for r in range(len(s)):
             count[s[r]] = 1 + count.get(s[r], 0)
-            maxxxx = max(maxxxx, count[s[r]])
+            maxf = max(maxf, count[s[r]])
 
-            if (r - l + 1) - maxxxx > k:
+            if (r - l + 1) - maxf > k:
                 count[s[l]] -= 1
                 l += 1
 
