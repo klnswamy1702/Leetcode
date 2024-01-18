@@ -1,4 +1,13 @@
 class DetectSquares:
+
+    # def __init__(self):
+        
+
+    # def add(self, point: List[int]) -> None:
+        
+
+    # def count(self, point: List[int]) -> int:
+
     def __init__(self):
         self.ptsCount = defaultdict(int)
         self.pts = []
@@ -15,8 +24,7 @@ class DetectSquares:
                 continue
             res += self.ptsCount[(x, py)] * self.ptsCount[(px, y)]
         return res
-
-   
+        
 
 
 # Your DetectSquares object will be instantiated and called as such:
