@@ -21,6 +21,8 @@ class TrieNode:
             if c in cur.children:
                 cur = cur.children[c]
                 cur.refs -= 1
+
+
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         root = TrieNode()
@@ -59,4 +61,5 @@ class Solution:
                 dfs(r, c, root, "")
 
         return list(res)
+
         
