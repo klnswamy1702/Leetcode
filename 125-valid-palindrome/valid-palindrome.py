@@ -7,3 +7,4 @@ class Solution:
                 newstr+=c.lower()
         return newstr==newstr[::-1]
         
+        
