@@ -1,20 +1,18 @@
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        cache = [[False] * (len(p) + 1) for i in range(len(s) + 1)]
-        cache[len(s)][len(p)] = True
-
-        for i in range(len(s), -1, -1):
-            for j in range(len(p) - 1, -1, -1):
-                match = i < len(s) and (s[i] == p[j] or p[j] == ".")
-
-                if (j + 1) < len(p) and p[j + 1] == "*":
-                    cache[i][j] = cache[i][j + 2]
-                    if match:
-                        cache[i][j] = cache[i + 1][j] or cache[i][j]
-                elif match:
-                    cache[i][j] = cache[i + 1][j + 1]
-
-        return cache[0][0]
+        @lru_cache(None)
+        def dp(i, j):
+            if j == len(p):  # If `j` reach end of pattern `p`
+                return i == len(s)  # Then it fully matches if and only if `i` reach end of string `s`
+				
+            if j+1 < len(p) and p[j+1] == '*':
+                ans = dp(i, j+2) # match zero chars
+                if i < len(s) and (s[i] == p[j] or p[j] == '.'):
+                    ans = ans or dp(i+1, j) # match 1 char, skip 1 char in s, don't skip in p since it can march one or match more characters
+                return ans
+            if p[j] == '.' or i < len(s) and s[i] == p[j]:
+                return dp(i+1, j+1) # match 1 char, skip 1 char in both s and p
+            return False
         
-        
+        return dp(0, 0)
         
