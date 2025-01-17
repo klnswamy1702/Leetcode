@@ -1,25 +1,37 @@
 class Solution:
     def countBalancedPermutations(self, num: str) -> int:
-        @cache
-        def dfs(i: int, j: int, a: int, b: int) -> int:
-            if i > 9:
-                return (j | a | b) == 0
-            if a == 0 and j:
-                return 0
-            ans = 0
-            for l in range(min(cnt[i], a) + 1):
-                r = cnt[i] - l
-                if 0 <= r <= b and l * i <= j:
-                    t = comb(a, l) * comb(b, r) * dfs(i + 1, j - l * i, a - l, b - r)
-                    ans = (ans + t) % mod
-            return ans
+        @lru_cache(8000)
+        def dp(digit, odd_sum, odd_digits, evn_digits, res = 0):
 
-        nums = list(map(int, num))
-        s = sum(nums)
-        if s % 2:
-            return 0
-        n = len(nums)
-        mod = 10**9 + 7
-        cnt = Counter(nums)
-        return dfs(0, s // 2, n // 2, (n + 1) // 2)
+            if digit > 9: return (odd_sum, odd_digits) == (odd_target, odd_cnt) # base case: 
+
+            for odd_add in range(ctr[digit] + 1):
+                evn_add = ctr[digit] - odd_add
+
+                if (digit * odd_add + odd_sum > odd_target or                   # 
+                    odd_digits + odd_add > odd_cnt or 
+                    evn_digits + evn_add > evn_cnt): continue
+
+                res+= (comb(odd_cnt - odd_digits, odd_add) %mod_ *
+
+                       comb(evn_cnt - evn_digits, evn_add) %mod_ *
+
+                       dp(digit + 1, odd_sum + digit * odd_add, 
+                          odd_digits + odd_add, 
+                          evn_digits + evn_add) %mod_)
+
+            return res %mod_
+
+
+        mod_ = 1_000_000_007
+
+        sm = sum([int(ch) for ch in num])
+        if sm % 2: return 0
+
+        ctr = [0] * 10
+        for ch in num: ctr[int(ch)]+= 1
+
+        odd_cnt, evn_cnt, odd_target = len(num)//2, (len(num)+1)//2, sm//2
+        
+        return dp(0,0,0,0) %mod_
         
