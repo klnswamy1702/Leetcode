@@ -1,10 +1,14 @@
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-        L = 1
+        if not nums:
+            return 0
         
-        for R in range(1, len(nums)):
-            if nums[R] != nums[R - 1]:
-                nums[L] = nums[R]
-                L += 1
-        return L
+        j = 0  # Initialize the 'unique' end at the first index
+        
+        for i in range(1, len(nums)):  # Start checking from the second element
+            if nums[i] != nums[j]:  # If a unique element is found
+                j += 1  # Move the unique index up
+                nums[j] = nums[i]  # Set the unique element at index j
+                
+        return j + 1  # Return the number of unique elements
         
