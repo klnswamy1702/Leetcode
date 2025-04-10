@@ -1,17 +1,17 @@
 class Solution:
     def getSum(self, a: int, b: int) -> int:
-        def add(a, b):
-            if not a or not b:
-                return a or b
-            return add(a ^ b, (a & b) << 1)
-
-        if a * b < 0:  # assume a < 0, b > 0
-            if a > 0:
-                return self.getSum(b, a)
-            if add(~a, 1) == b:  # -a == b
-                return 0
-            if add(~a, 1) < b:  # -a < b
-                return add(~add(add(~a, 1), add(~b, 1)), 1)  # -add(-a, -b)
-
-        return add(a, b)
+        # 32 bits integer max
+        MAX = 0x7FFFFFFF
+        # Mask for bits beyond 32
+        MASK = 0xFFFFFFFF
+        # Iterating until there are no carries
+        while b != 0:
+            # Carry is AND, shifted left by 1
+            carry = (a & b) << 1
+            # Add without carry using XOR
+            a = (a ^ b) & MASK
+            # Apply mask to carry
+            b = carry & MASK
+        # If a is negative, use ~ operation with MASK
+        return a if a <= MAX else ~(a ^ MASK)
         
