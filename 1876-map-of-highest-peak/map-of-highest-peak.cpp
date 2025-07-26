@@ -1,34 +1,40 @@
 class Solution {
 public:
     vector<vector<int>> highestPeak(vector<vector<int>>& isWater) {
-        int m = isWater.size(), n = isWater[0].size();
+        int m = isWater.size();
+        int n = isWater[0].size();
         vector<vector<int>> height(m, vector<int>(n, -1));
         queue<pair<int, int>> q;
-        
-        // Initialize water cells
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j < n; j++) {
-                if(isWater[i][j]) {
+
+        // Push all water cells into the queue
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (isWater[i][j] == 1) {
                     height[i][j] = 0;
                     q.push({i, j});
                 }
             }
         }
-        
-        // BFS directions
-        int dirs[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
-        
-        // BFS from water to land
-        while(!q.empty()) {
-            auto [x, y] = q.front(); q.pop();
-            for(auto [dx, dy] : dirs) {
-                int nx = x + dx, ny = y + dy;
-                if(nx >= 0 && nx < m && ny >= 0 && ny < n && height[nx][ny] == -1) {
-                    height[nx][ny] = height[x][y] + 1;
-                    q.push({nx, ny});
+
+        int delRow[] = {-1, 0, 1, 0};
+        int delCol[] = {0, 1, 0, -1};
+
+        while (!q.empty()) {
+            auto [row, col] = q.front();
+            q.pop();
+
+            for (int i = 0; i < 4; ++i) {
+                int nrow = row + delRow[i];
+                int ncol = col + delCol[i];
+
+                if (nrow >= 0 && nrow < m && ncol >= 0 && ncol < n &&
+                    height[nrow][ncol] == -1) {
+                    height[nrow][ncol] = height[row][col] + 1;
+                    q.push({nrow, ncol});
                 }
             }
         }
+
         return height;
     }
 };
