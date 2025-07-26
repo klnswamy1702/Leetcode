@@ -28,7 +28,7 @@ public:
         for (int i = 0; i < V; i++) {
             if (!vis[i]) {
                 cnt++;
-                dfs(i, adjLs, vis);  // Now correctly matches the signature
+                dfs(i, adjLs, vis);  
             }
         }
 
