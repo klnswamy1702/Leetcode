@@ -1,39 +1,45 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& adj, vector<int>& visited, vector<int>& result) {
-        visited[node] = 1;  // mark as visiting
-
-        for (int neighbor : adj[node]) {
-            if (visited[neighbor] == 0) {
-                if (!dfs(neighbor, adj, visited, result))
-                    return false;
-            } else if (visited[neighbor] == 1) {
-                return false;  // cycle detected
-            }
-        }
-
-        visited[node] = 2;  // mark as visited
-        result.push_back(node);  // post-order insertion
-        return true;
-    }
-
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> adj(numCourses);
+        vector<int> adj[numCourses];
+        vector<int> inDegree(numCourses, 0);
+
+        // Step 1: Build the graph
         for (auto& pre : prerequisites) {
-            adj[pre[1]].push_back(pre[0]);  // u -> v (take u before v)
+            int u = pre[1];  // prerequisite course
+            int v = pre[0];  // course to take
+            adj[u].push_back(v);
+            inDegree[v]++;
         }
 
-        vector<int> visited(numCourses, 0);
-        vector<int> result;
-
+        // Step 2: Push all courses with no prerequisites
+        queue<int> q;
         for (int i = 0; i < numCourses; ++i) {
-            if (visited[i] == 0) {
-                if (!dfs(i, adj, visited, result))
-                    return {};  // cycle detected
+            if (inDegree[i] == 0) {
+                q.push(i);
             }
         }
 
-        reverse(result.begin(), result.end());
-        return result;
+        // Step 3: BFS
+        vector<int> topoOrder;
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            topoOrder.push_back(node);
+
+            for (int neighbor : adj[node]) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    q.push(neighbor);
+                }
+            }
+        }
+
+        // Step 4: Check if all courses are included
+        if (topoOrder.size() == numCourses) {
+            return topoOrder;
+        }
+
+        return {};  // cycle detected, not all courses can be completed
     }
 };
