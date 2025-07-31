@@ -10,7 +10,7 @@ public:
 
         // Min-heap priority queue: {distance, node}
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
-        vector<int> dist(n + 1, INT_MAX);
+        vector<int> dist(n + 1, 1e9);
         dist[k] = 0;
         pq.push({0, k});
 
@@ -27,7 +27,7 @@ public:
 
         int maxTime = 0;
         for (int i = 1; i <= n; ++i) {
-            if (dist[i] == INT_MAX) return -1;
+            if (dist[i] == 1e9) return -1;
             maxTime = max(maxTime, dist[i]);
         }
         return maxTime;
