@@ -1,18 +1,20 @@
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        @lru_cache(None)
-        def dp(i, j):
-            if j == len(p):  # If `j` reach end of pattern `p`
-                return i == len(s)  # Then it fully matches if and only if `i` reach end of string `s`
-				
-            if j+1 < len(p) and p[j+1] == '*':
-                ans = dp(i, j+2) # match zero chars
-                if i < len(s) and (s[i] == p[j] or p[j] == '.'):
-                    ans = ans or dp(i+1, j) # match 1 char, skip 1 char in s, don't skip in p since it can march one or match more characters
-                return ans
-            if p[j] == '.' or i < len(s) and s[i] == p[j]:
-                return dp(i+1, j+1) # match 1 char, skip 1 char in both s and p
-            return False
+        m, n = len(s), len(p)
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+        dp[0][0] = True
         
-        return dp(0, 0)
+        for j in range(2, n + 1):
+            if p[j - 1] == '*':
+                dp[0][j] = dp[0][j - 2]
         
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if p[j - 1] == s[i - 1] or p[j - 1] == '.':
+                    dp[i][j] = dp[i - 1][j - 1]
+                elif p[j - 1] == '*':
+                    dp[i][j] = dp[i][j - 2]
+                    if p[j - 2] == s[i - 1] or p[j - 2] == '.':
+                        dp[i][j] = dp[i][j] or dp[i - 1][j]
+        
+        return dp[m][n]
