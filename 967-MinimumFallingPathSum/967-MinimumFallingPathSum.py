@@ -1,0 +1,12 @@
+# Last updated: 07/11/2025, 13:43:25
+class Solution(object):
+    def minFallingPathSum(self, matrix):
+
+        """
+        :type matrix: List[List[int]]
+        :rtype: int
+        """
+        for r in range(1, len(matrix)):
+            for c in range(len(matrix[0])):
+                matrix[r][c] += min(matrix[r - 1][max(0, c - 1):c + 2])
+        return min(matrix[-1])
